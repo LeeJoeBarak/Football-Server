@@ -1,0 +1,180 @@
+---
+openapi: 3.0.0
+info:
+  title: footballZone
+  description: football_api
+  version: v1
+servers:
+- url: https://virtserver.swaggerhub.com/footballZone/footballZone/v1
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: user
+- name: Auth
+- name: pages
+paths:
+  /register:
+    post:
+      tags:
+      - Auth
+      summary: Add a new user to the server
+      description: Json
+      requestBody:
+        description: registration
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: A new user was added to the server
+        "405":
+          description: Invalid input
+  /login/{userName}:
+    get:
+      tags:
+      - Auth
+      summary: login user to the server
+      description: Json
+      parameters:
+      - name: userName
+        in: path
+        description: name
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: user's data
+          content:
+            application/json:
+              schema:
+                type: string
+        "404":
+          description: user not found
+  /updateUser/{userName}:
+    put:
+      tags:
+      - user
+      summary: Update an existing user
+      description: update user details
+      parameters:
+      - name: userName
+        in: path
+        description: User update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          aplplication/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: User not found
+        "405":
+          description: Validation exception
+  /primaryView:
+    get:
+      tags:
+      - pages
+      summary: present 2 columns of information
+      parameters:
+      - name: userName
+        in: query
+        description: the username of the authenticated user, if exists
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: data retrieved
+          content:
+            application/json:
+              schema:
+                type: string
+        "404":
+          description: user not found
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          maxLength: 8
+          minLength: 3
+          type: string
+          example: jane Doe
+        password:
+          maxLength: 10
+          minLength: 5
+          type: string
+          description: |
+            password must contain between 5 to 10 chars,  must contain at least 1 digit and 1 letter
+          format: password
+          example: "123456"
+        confirmationPassword:
+          maxLength: 10
+          minLength: 5
+          type: string
+          format: password
+          example: "123456"
+        first name:
+          maxLength: 10
+          minLength: 2
+        last name:
+          maxLength: 10
+          minLength: 2
+        data:
+          type: string
+          example: lives in beer sheva
+        email:
+          type: string
+          description: mail adress
+          format: email
+          example: jane@gamil.com
+        image-url:
+          type: string
+          format: URL
+          example: https://simple.wikipedia.org/wiki/Jane_Fonda#/media/File:Jane_Fonda_Cannes_2018.jpg
+        teams:
+          type: array
+          items:
+            type: string
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/User_players'
+        matches:
+          type: array
+          items:
+            type: string
+    leagueDetails:
+      type: object
+      properties:
+        league name:
+          type: string
+        season:
+          type: string
+        stage:
+          type: string
+        next match:
+          type: string
+    User_players:
+      type: object
+      properties:
+        players name:
+          type: string
+        team name:
+          type: string
+        position:
+          type: string
