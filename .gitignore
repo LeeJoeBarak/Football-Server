@@ -1,1 +1,3 @@
 project/secrets
+.idea
+project\routes\utils\.env
