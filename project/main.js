@@ -38,6 +38,7 @@ app.get("/api", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+
 const corsConfig = {
   origin: true,
   credentials: true,
