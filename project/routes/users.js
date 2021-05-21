@@ -5,7 +5,7 @@ const users_utils = require("./utils/users_utils");
 const players_utils = require("./utils/players_utils");
 
 /**
- * Authenticate all incoming requests by middleware
+ * Authenticate all incoming requests by *middleware*
  */
 router.use(async function (req, res, next) {
   if (req.session && req.session.user_id) {
