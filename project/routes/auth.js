@@ -5,13 +5,14 @@ const bcrypt = require("bcryptjs");
 const { createWebToken } = require("../auth/auth.service");
 
 
+
 router.post("/Register", async (req, res, next) => {
   try {
     // parameters exists
     // valid parameters
     // username exists
     const users = await DButils.execQuery(
-      "SELECT username FROM dbo.users_tirgul"
+      "SELECT username FROM dbo.users"
     );
 
     if (users.find((x) => x.username === req.body.username))
@@ -26,7 +27,7 @@ router.post("/Register", async (req, res, next) => {
 
     // add the new username
     await DButils.execQuery(
-      `INSERT INTO dbo.users_tirgul (username, password) VALUES ('${req.body.username}', '${hash_password}')`
+      `INSERT INTO dbo.users (username, password) VALUES ('${req.body.username}', '${hash_password}')`
     );
 
     res.status(200).send({
@@ -40,11 +41,12 @@ router.post("/Register", async (req, res, next) => {
   }
 });
 
+
 router.post("/Login", async (req, res, next) => {
   try {
     const user = (
       await DButils.execQuery(
-        `SELECT * FROM dbo.users_tirgul WHERE username = '${req.body.username}'`
+        `SELECT * FROM dbo.users WHERE username = '${req.body.username}'`
       )
     )[0];
     // user = user[0];

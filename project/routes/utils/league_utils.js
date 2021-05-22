@@ -1,6 +1,7 @@
 const axios = require("axios");
 const LEAGUE_ID = 271;
 
+
 async function getLeagueDetails() {
   const league = await axios.get(
     `https://soccer.sportmonks.com/api/v2.0/leagues/${LEAGUE_ID}`,
