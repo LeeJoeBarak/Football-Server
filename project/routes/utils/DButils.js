@@ -1,7 +1,6 @@
 require("dotenv").config();
 const sql = require("mssql");
 
-
 const config = {
   user: process.env.ADMIN_LOGIN_NAME,
   password: process.env.ADMIN_LOGIN_PASSWORD,
@@ -11,7 +10,6 @@ const config = {
     encrypt: true,
     enableArithAbort: true
   }
-
 };
 
 const pool = new sql.ConnectionPool(config);
@@ -57,3 +55,6 @@ exports.execQuery = async function (query) {
 //       });
 //   });
 // };
+
+
+
