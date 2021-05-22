@@ -1,1 +1,2 @@
-project/routes/utils/.env
+.env
+node_modules
