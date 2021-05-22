@@ -3,6 +3,7 @@ var router = express.Router();
 const DButils = require("../routes/utils/DButils");
 const bcrypt = require("bcryptjs");
 
+
 router.post("/Register", async (req, res, next) => {
   try {
     // parameters exists
@@ -32,6 +33,7 @@ router.post("/Register", async (req, res, next) => {
   }
 });
 
+
 router.post("/Login", async (req, res, next) => {
   try {
     const user = (
@@ -56,6 +58,7 @@ router.post("/Login", async (req, res, next) => {
     next(error);
   }
 });
+
 
 router.post("/Logout", function (req, res) {
   req.session.reset(); // reset the session info --> send cookie when  req.session == undefined!!

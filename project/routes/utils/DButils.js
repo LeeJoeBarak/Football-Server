@@ -1,15 +1,17 @@
 require("dotenv").config();
 const sql = require("mssql");
 
+
 const config = {
-  user: process.env.tedious_userName,
-  password: process.env.tedious_password,
-  server: process.env.tedious_server,
-  database: process.env.tedious_database,
+  user: process.env.ADMIN_LOGIN_NAME,
+  password: process.env.ADMIN_LOGIN_PASSWORD,
+  server: process.env.SERVER_NAME,
+  database: process.env.DB_NAME,
   options: {
     encrypt: true,
     enableArithAbort: true
   }
+
 };
 
 const pool = new sql.ConnectionPool(config);

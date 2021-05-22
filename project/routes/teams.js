@@ -3,6 +3,7 @@ var router = express.Router();
 const DButils = require("./utils/DButils");
 const players_utils = require("./utils/players_utils");
 
+
 router.get("/teamFullDetails/:teamId", async (req, res, next) => {
   let team_details = [];
   try {

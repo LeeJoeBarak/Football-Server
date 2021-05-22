@@ -12,12 +12,14 @@ var logger = require("morgan");
 var cors = require("cors");
 
 var app = express();
+/*EXLANATION app.use(...):
+To setup your *middleware*, you can invoke app.use(<specific_middleware_layer_here>) */
 app.use(logger("dev")); //logger
 app.use(express.json()); // parse application/json
 app.use(
   session({
     cookieName: "session", // the cookie key name
-    secret: process.env.COOKIE_SECRET, // the encryption key
+    secret: process.env.COOKIE_SECRET, // the encryption key 
     duration: 24 * 60 * 60 * 1000, // expired after 20 sec
     activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration,
     cookie: {
@@ -32,10 +34,10 @@ app.use(express.static(path.join(__dirname, "public"))); //To serve static files
 // middleware to serve all the needed static files under the dist directory - loaded from the index.html file
 // https://expressjs.com/en/starter/static-files.html
 app.use(express.static("dist"));
-
 app.get("/api", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
+
 
 const corsConfig = {
   origin: true,
