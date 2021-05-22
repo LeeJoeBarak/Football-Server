@@ -3,32 +3,33 @@ var router = express.Router();
 const DButils = require("./utils/DButils");
 const users_utils = require("./utils/users_utils");
 const players_utils = require("./utils/players_utils");
+const { loginRequiredMiddleware } = require("../auth/auth.middleware");
 
 
 /**
  * Authenticate all incoming requests by *middleware*
  */
-router.use(async function (req, res, next) {
-  if (req.session && req.session.user_id) {
-    DButils.execQuery("SELECT user_id FROM users_tirgul")
-      .then((users) => {
-        if (users.find((x) => x.user_id === req.session.user_id)) {
-          req.user_id = req.session.user_id;
-          next();
-        }
-      })
-      .catch((err) => next(err));
-  } else {
-    res.sendStatus(401);
-  }
-});
-
+// router.use(async function (req, res, next) {
+//   if (req.session && req.session.user_id) {
+//     DButils.execQuery("SELECT user_id FROM users_tirgul")
+//       .then((users) => {
+//         if (users.find((x) => x.user_id === req.session.user_id)) {
+//           req.user_id = req.session.user_id;
+//           next();
+//         }
+//       })
+//       .catch((err) => next(err));
+//   } else {
+//     res.sendStatus(401);
+//   }
+// });
+router.use(loginRequiredMiddleware)
 /**
  * This path gets body with playerId and save this player in the favorites list of the logged-in user
  */
 router.post("/favoritePlayers", async (req, res, next) => {
   try {
-    const user_id = req.session.user_id;
+    const user_id = req.username;
     const player_id = req.body.playerId;
     await users_utils.markPlayerAsFavorite(user_id, player_id);
     res.status(201).send("The player successfully saved as favorite");

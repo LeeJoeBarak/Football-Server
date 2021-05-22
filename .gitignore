@@ -1,3 +1,4 @@
-project/secrets
+
+.env
+node_modules
 .idea
-project\routes\utils\.env

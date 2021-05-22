@@ -1,6 +1,6 @@
-require("dotenv").config();
+require("dotenv").config('./env');
 const sql = require("mssql");
-
+console.log(process.env.SERVER_NAME)
 const config = {
   user: process.env.ADMIN_LOGIN_NAME,
   password: process.env.ADMIN_LOGIN_PASSWORD,
