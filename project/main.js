@@ -1,16 +1,19 @@
+//--- Libraries Importing
 //#region global imports
 const DButils = require("./routes/utils/DButils");
 const axios = require("axios");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 //#endregion
-//#region express configures
+//#region express configurations
 var express = require("express");
 var path = require("path");
 const session = require("client-sessions");
 var logger = require("morgan");
 var cors = require("cors");
+//#endregion
 
+//--- App settings and config
 var app = express();
 app.use(logger("dev")); //logger
 app.use(express.json()); // parse application/json
@@ -46,12 +49,11 @@ app.use(cors(corsConfig));
 app.options("*", cors(corsConfig));
 
 const port = process.env.PORT || "3000";
-
+//--- Routers Importing
 const auth = require("./routes/auth");
 const users = require("./routes/users");
 const league = require("./routes/league");
 const teams = require("./routes/teams");
-
 //#endregion
 
 //#region cookie middleware
@@ -74,7 +76,7 @@ app.use(function (req, res, next) {
 // ----> For cheking that our server is alive
 app.get("/alive", (req, res) => res.send("I'm alive"));
 
-// Routings
+// Route any request that starts with "/users" to the router <users> 
 app.use("/users", users);
 app.use("/league", league);
 app.use("/teams", teams);
