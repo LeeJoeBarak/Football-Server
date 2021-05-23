@@ -3,6 +3,12 @@ const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 // const TEAM_ID = "85";
 
 
+async function getPlayersByTeam(team_id) {
+  let player_ids_list = await getPlayerIdsByTeam(team_id);
+  let players_info = await getPlayersInfo(player_ids_list);
+  return players_info;
+}
+
 async function getPlayerIdsByTeam(team_id) {
   let player_ids_list = [];
   const team = await axios.get(`${api_domain}/teams/${team_id}`, {
@@ -46,11 +52,36 @@ function extractRelevantPlayerData(players_info) {
   });
 }
 
-async function getPlayersByTeam(team_id) {
-  let player_ids_list = await getPlayerIdsByTeam(team_id);
-  let players_info = await getPlayersInfo(player_ids_list);
-  return players_info;
+//============
+async function getSinglePlayerDetailsById(player_id) {
+  const player = axios.get(`${api_domain}/players/${player_id}`, {
+    params: {
+      api_token: process.env.api_token,
+      include: "team",
+    },
+  })
+  return
 }
 
-exports.getPlayersByTeam = getPlayersByTeam;
-exports.getPlayersInfo = getPlayersInfo;
+function extractSinglePlayerData(player) {
+  const { fullname, image_path, position_id } = player.data.data;
+  const { name } = player.data.data.team.data;
+  return {
+    name: fullname,
+    image: image_path,
+    position: position_id,
+    team_name: name,
+  };
+}
+
+//=================
+
+
+
+
+module.exports = {
+  getSinglePlayerDetailsById: getSinglePlayerDetailsById,
+  extractSinglePlayerData: extractSinglePlayerData,
+  getPlayersByTeam: getPlayersByTeam,
+  getPlayersInfo: getPlayersInfo
+}

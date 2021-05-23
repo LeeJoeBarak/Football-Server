@@ -18,6 +18,7 @@ const auth = require("./routes/auth");
 const users = require("./routes/users");
 const league = require("./routes/league");
 const teams = require("./routes/teams");
+const players = require("./routes/player");
 //#endregion
 
 //--- App settings and config
@@ -39,6 +40,7 @@ app.use(express.json()); // parse application/json
 //     //the session will be extended by activeDuration milliseconds
 //   })
 // );
+
 app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, "public"))); //To serve static files such as images, CSS files, and JavaScript files
 
@@ -49,16 +51,12 @@ app.get("/api", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-
 const corsConfig = {
   origin: true,
   credentials: true,
 };
-
 app.use(cors(corsConfig));
 app.options("*", cors(corsConfig));
-
-
 
 //#region cookie middleware
 // app.use(function (req, res, next) {
@@ -84,7 +82,8 @@ app.get("/alive", (req, res) => res.send("I'm alive"));
 app.use("/users", users);
 app.use("/league", league);
 app.use("/teams", teams);
-app.use(auth);
+app.use("/players", players);
+app.use(auth); //ANY URI is routed to auth.js ????
 
 app.use(function (err, req, res, next) {
   console.error(err);

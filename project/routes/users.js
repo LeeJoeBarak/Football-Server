@@ -23,6 +23,7 @@ const { loginRequiredMiddleware } = require("../auth/auth.middleware");
 //     res.sendStatus(401);
 //   }
 // });
+
 router.use(loginRequiredMiddleware)
 /**
  * This path gets body with playerId and save this player in the favorites list of the logged-in user
