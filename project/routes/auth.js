@@ -12,7 +12,7 @@ router.post("/Register", async (req, res, next) => {
     // valid parameters
     // username exists
     const users = await DButils.execQuery(
-      "SELECT username FROM dbo.users"
+      "SELECT username FROM dbo.Users"
     );
 
     if (users.find((x) => x.username === req.body.username))
@@ -27,10 +27,10 @@ router.post("/Register", async (req, res, next) => {
 
     // add the new username
     await DButils.execQuery(
-      `INSERT INTO dbo.users (username, password) VALUES ('${req.body.username}', '${hash_password}')`
+      `INSERT INTO dbo.Users (username, password) VALUES ('${req.body.username}', '${hash_password}')`
     );
 
-    res.status(200).send({
+    res.status(201).send({
       user: {
         username: req.body.username
       },
@@ -46,7 +46,7 @@ router.post("/Login", async (req, res, next) => {
   try {
     const user = (
       await DButils.execQuery(
-        `SELECT * FROM dbo.users WHERE username = '${req.body.username}'`
+        `SELECT * FROM dbo.Users WHERE username = '${req.body.username}'`
       )
     )[0];
     // user = user[0];
@@ -58,7 +58,7 @@ router.post("/Login", async (req, res, next) => {
     }
 
     // Set cookie
-    req.session.user_id = user.user_id;
+    req.session.user_id = user.id;
     delete user.password
 
     // return cookie
