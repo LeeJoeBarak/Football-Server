@@ -3,8 +3,15 @@ var router = express.Router();
 const league_utils = require("./utils/league_utils");
 
 
-// Don't add "/league" to the route because any request that was directed to this .js file 
-// necessarily had "/league" at its beginning (we set that in main.js)
+
+
+/**
+ * This path returns the favorites games that were saved by the logged-in user
+ * @route GET /league/getDetails
+ * @group league - operations about the league Superliga (id 271)
+ * @returns {object} 200 - An object of favorite games info
+ * @returns {Error}  default - Unexpected error
+ */
 router.get("/getDetails", async (req, res, next) => {
   try {
     const league_details = await league_utils.getLeagueDetails();

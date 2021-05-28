@@ -1,5 +1,6 @@
 const axios = require("axios");
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
+require("dotenv").config();
 // const TEAM_ID = "85";
 
 
@@ -52,28 +53,42 @@ function extractRelevantPlayerData(players_info) {
   });
 }
 
+
+
 //============
+
 async function getSinglePlayerDetailsById(player_id) {
-  const player = axios.get(`${api_domain}/players/${player_id}`, {
+  const player = await axios.get(`${api_domain}/players/${player_id}`, {
     params: {
       api_token: process.env.api_token,
       include: "team",
     },
   })
-  return
+  
+  return extractSinglePlayerData(player, playerTeam.data.data.name);
 }
 
-function extractSinglePlayerData(player) {
-  const { fullname, image_path, position_id } = player.data.data;
-  const { name } = player.data.data.team.data;
+function extractSinglePlayerData(player, playerTeamName) {
+  const { position_id, common_name, fullname,
+    nationality, birthdate, birthcountry,
+    birthplace, height, weight, image_path } = player.data.data;
   return {
     name: fullname,
     image: image_path,
     position: position_id,
-    team_name: name,
+    common_name: common_name,
+    nationality: nationality,
+    birthdate: birthdate,
+    birthcountry: birthcountry,
+    birthplace: birthplace,
+    height: height,
+    weight: weight,
+    team_name: playerTeamName,
   };
 }
 
+//const player_id = '24657'
+//getSinglePlayerDetailsById(player_id);
 //=================
 
 

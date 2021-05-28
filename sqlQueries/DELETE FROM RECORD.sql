@@ -1,0 +1,1 @@
+DELETE FROM dbo.GameEvents WHERE gameId=5;

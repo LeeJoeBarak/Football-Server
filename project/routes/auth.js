@@ -2,11 +2,19 @@ var express = require("express");
 var router = express.Router();
 const DButils = require("../routes/utils/DButils");
 const bcrypt = require("bcryptjs");
-const { createWebToken } = require("../auth/auth.service");
+//const { createWebToken } = require("../auth/auth.service");
 
 
 
-router.post("/Register", async (req, res, next) => {
+/**
+ * This path returns the favorites games that were saved by the logged-in user
+ * @route POST /auth/register
+ * @group auth - authentication operations
+ * @returns {string} 200 - user created
+ * @returns {Error}  default - Unexpected error
+ * @returns {Error} 409 - Username Taken
+ */
+router.post("/register", async (req, res, next) => {
   try {
     // parameters exists
     // valid parameters
@@ -27,22 +35,25 @@ router.post("/Register", async (req, res, next) => {
 
     // add the new username
     await DButils.execQuery(
-      `INSERT INTO dbo.Users (username, password) VALUES ('${req.body.username}', '${hash_password}')`
+      `INSERT INTO dbo.Users (username, password, is_admin, 
+          first_name, last_name, country, email, image_url) VALUES ('${req.body.username}', '${hash_password}', 'FALSE', '${req.body.firstname}', '${req.body.lastname}', '${req.body.country}', '${req.body.email}', '${req.body['image-url']}')`
     );
-
-    res.status(201).send({
-      user: {
-        username: req.body.username
-      },
-      token: createWebToken({ username: req.body.username })
-    });
+    res.status(200).send("user created");
   } catch (error) {
     next(error);
   }
 });
 
 
-router.post("/Login", async (req, res, next) => {
+/**
+ * This path returns the favorites games that were saved by the logged-in user
+ * @route POST /auth/login
+ * @group auth - authentication operations 
+ * @returns {string} 200 - login succeeded
+ * @returns {Error}  default - Unexpected error
+ * @returns {Error} 401 - Username or Password incorrect
+ */
+router.post("/login", async (req, res, next) => {
   try {
     const user = (
       await DButils.execQuery(
@@ -59,26 +70,25 @@ router.post("/Login", async (req, res, next) => {
 
     // Set cookie
     req.session.user_id = user.id;
-    delete user.password
 
     // return cookie
-    res.status(200).send({
-      user: user,
-      token: createWebToken({
-        username: req.body.username
-      })
-    });
+    res.status(200).send("login succeeded");
   } catch (error) {
     next(error);
   }
 });
 
 
-router.post("/Logout", function (req, res) {
+/**
+ * This path returns the favorites games that were saved by the logged-in user
+ * @route POST /auth/logout
+ * @group auth - authentication operations 
+ * @returns {object} 200 - An object: { success: true, message: "logout succeeded" }
+ * @returns {Error}  default - Unexpected error
+ */
+router.post("/logout", function (req, res) {
   req.session.reset(); // reset the session info --> send cookie when  req.session == undefined!!
-  res.send({
-    success: true, message: "logout succeeded",
-  });
+  res.status(200).send({ success: true, message: "logout succeeded" });
 });
 
 module.exports = router;
